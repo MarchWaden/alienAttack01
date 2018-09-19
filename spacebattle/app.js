@@ -1,14 +1,16 @@
 console.log('BATTLE BEGIN')
 
 class Ship {
-   constructor(name,hp,accuracy, firepower) {
+   constructor(name,hp,accuracy, firepower,missiles) {
      this.name = name;
      this.hp = hp;
      this.accuracy = accuracy;
      this.firepower = firepower;
+     this.missiles = missiles;
    }
 
    attack (enemy) {
+
     if (Math.random() < this.accuracy) { //if a hit is rolled, subtract our firepower from the enemy's hp
         enemy.hp = enemy.hp - this.firepower;
         if(enemy.hp <= 0){ //if the enemy's hp is less than zero change it to zero
@@ -22,16 +24,18 @@ class Ship {
 }
 
 class AlienShip extends Ship {
-    constructor(name,hp,accuracy,firepower) {
-        super(name,hp,accuracy,firepower)
+    constructor(name,hp,accuracy,firepower,missiles) {
+        super(name,hp,accuracy,firepower,missiles)
         this.name = name;
         this.hp = Math.floor(Math.random()*(7-3)+3);
         this.accuracy = (Math.random()*(.2)+.6);
         this.firepower = Math.floor(Math.random()*(3))+2;
+        this.missiles = missiles;
     }
 }
 
-const USSAsembly = new Ship('USSAsembly', 20+Math.floor(Math.random()*4),.7,5) //added shields to USSAsembly's hp.
+const USSAsembly = new Ship('USSAsembly', 20+Math.floor(Math.random()*4),.7,5,4) //added shields to USSAsembly's hp.
+
 
 const alienArray = [];
 
@@ -39,14 +43,23 @@ const numberOfAlienShips = Math.floor(Math.random()*20)+1;
 console.log(`There are ${numberOfAlienShips} alien ships.`);
 
 for(let i =1; i<(numberOfAlienShips); i++){
-    alienArray[i] = new AlienShip(`alienShip${i}`, "hp","accuracy","firepower")
+    alienArray[i] = new AlienShip(`alienShip${i}`, "hp","accuracy","firepower",0)
 }
 
 let retreatCheck = false;
+let missilesCheck = false;
 
 const battle = (enemy) => {
     while(USSAsembly.hp > 0  && enemy.hp > 0){
-        USSAsembly.attack(enemy)
+        if (!missilesCheck){
+        USSAsembly.attack(enemy);
+      }else{
+        console.log("working")
+        enemy.hp = 0;
+        console.log("Nuclear launch detected!");
+        missilesCheck = false;
+        USSAsembly.missiles -= 1;
+      }
         if (enemy.hp === 0) {
             break
         }
@@ -56,7 +69,7 @@ const battle = (enemy) => {
 }
 
 // the battles
-for(let i=1; i<alienArray.length-1; i++){
+for(let i=1; i<alienArray.length; i++){
     battle(alienArray[i]);
     if(USSAsembly.hp === 0){
         break
@@ -68,6 +81,10 @@ for(let i=1; i<alienArray.length-1; i++){
     if (retreatCheck === true){
         break
     }
+    const missilesOption = prompt('Do you want to use a missile? Answer "yes" or "no"').toLowerCase();
+    if (missilesOption === 'yes'){
+      missilesCheck = true;
+    }
 }
 
 console.log(alienArray);
@@ -77,7 +94,7 @@ if(USSAsembly.hp > 0 && alienArray[alienArray.length-1].hp === 0){
     console.log("USS ASSEMBLY win")
 }
 
-if(retreatCheck === true){
+else if(retreatCheck === true){
     console.log("YOU RETREATED")
 }
 
