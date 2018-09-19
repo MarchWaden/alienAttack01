@@ -39,7 +39,7 @@ const USSAsembly = new Ship('USSAsembly', 20+Math.floor(Math.random()*4),.7,5,4)
 
 const alienArray = [];
 
-const numberOfAlienShips = Math.floor(Math.random()*20)+1;
+const numberOfAlienShips = Math.floor(Math.random()*12)+2;
 console.log(`There are ${numberOfAlienShips} alien ships.`);
 
 for(let i =1; i<(numberOfAlienShips); i++){
@@ -54,9 +54,9 @@ const battle = (enemy) => {
         if (!missilesCheck){
         USSAsembly.attack(enemy);
       }else{
-        console.log("working")
         enemy.hp = 0;
         console.log("Nuclear launch detected!");
+        console.log(`${enemy.name} was destroyed!`);
         missilesCheck = false;
         USSAsembly.missiles -= 1;
       }
@@ -81,10 +81,16 @@ for(let i=1; i<alienArray.length; i++){
     if (retreatCheck === true){
         break
     }
-    const missilesOption = prompt('Do you want to use a missile? Answer "yes" or "no"').toLowerCase();
-    if (missilesOption === 'yes'){
-      missilesCheck = true;
+    if (USSAsembly.missiles > 0){
+      const missilesOption = prompt('Do you want to use a missile? Answer "yes" or "no"').toLowerCase();
+      if (missilesOption === 'yes'){
+        missilesCheck = true;
     }
+    }
+    if (USSAsembly.missiles === 0){
+      console.log("Out of missiles!");
+    }
+
 }
 
 console.log(alienArray);
