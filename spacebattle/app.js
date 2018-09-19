@@ -6,12 +6,12 @@ class Ship {
      this.hp = hp;
      this.accuracy = accuracy;
      this.firepower = firepower;
-   } 
+   }
 
    attack (enemy) {
-    if (Math.random() < this.accuracy) {
+    if (Math.random() < this.accuracy) { //if a hit is rolled, subtract our firepower from the enemy's hp
         enemy.hp = enemy.hp - this.firepower;
-        if(enemy.hp <= 0){
+        if(enemy.hp <= 0){ //if the enemy's hp is less than zero change it to zero
             enemy.hp = 0;
         }
         console.log( `${this.name} hit ${enemy.name} for ${this.firepower}. ${enemy.name} has ${enemy.hp} remaining!`);
@@ -27,11 +27,11 @@ class AlienShip extends Ship {
         this.name = name;
         this.hp = Math.floor(Math.random()*(7-3)+3);
         this.accuracy = (Math.random()*(.2)+.6);
-        this.firepower = Math.floor(Math.random()*(3))+2; 
+        this.firepower = Math.floor(Math.random()*(3))+2;
     }
 }
 
-const USSAsembly = new Ship('USSAsembly', 20,.7,5)
+const USSAsembly = new Ship('USSAsembly', 20+Math.floor(Math.random()*4),.7,5) //added shields to USSAsembly's hp.
 
 const alienArray = [];
 
@@ -51,11 +51,11 @@ const battle = (enemy) => {
             break
         }
         enemy.attack(USSAsembly)
-    
+
     }
 }
 
-// the battles 
+// the battles
 for(let i=1; i<alienArray.length-1; i++){
     battle(alienArray[i]);
     if(USSAsembly.hp === 0){
